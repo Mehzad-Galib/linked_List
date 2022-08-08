@@ -64,13 +64,43 @@ void reversedListPrint(Node *head)
     cout << head->value << " ";
 }
 
+int countLength(Node *&head)
+{
+    int count = 0;
+    Node *temp = head;
+    while (temp != NULL)
+    {
+        count++;
+        temp = temp->Next;
+    }
+
+    return count;
+}
+
+void insertAtSpecific(Node *&head, int pos, int val)
+{
+    int i = 0;
+    Node *temp = head;
+    while (i < pos - 2)
+    {
+        temp = temp->Next;
+        i++;
+    }
+    Node *newNode = new Node(val);
+
+    newNode->Next = temp->Next;
+    temp->Next = newNode;
+}
+
 int main()
 {
     Node *head = NULL;
-    int value;
+    int value, position;
 
     cout << "choice 1: Insertion at head" << endl
          << "choice 2: Insertion at tail" << endl
+         << "choice 3: Insertion at specific"
+         << endl
          << "choice 0: Exit" << endl;
 
     cout << "first value will automatically inserted at head" << endl;
@@ -83,32 +113,41 @@ int main()
 
     while (choice != 0)
     {
-        cout << "Enter the value: ";
 
-        cin >> value;
         switch (choice)
         {
         case 1:
+            cout << "Enter the value: ";
+            cin >> value;
             insertAtHead(head, value);
             count++;
             break;
         case 2:
+            cout << "Enter the value: ";
+            cin >> value;
             insertAtTail(head, value);
             count++;
+            break;
+        case 3:
+            cout << "enter desired position: ";
+            cin >> position;
+            cout << "Enter the value: ";
+            cin >> value;
+            insertAtSpecific(head, position, value);
             break;
         default:
             break;
         }
 
-        cout << "Next choice? (1:insertion at head, 2: insertion at tail)" << endl;
+        cout << "Next choice? (1:insertion at head, 2: insertion at tail, 3: insertion at specific)" << endl;
         cin >> choice;
     }
 
     cout << "actual linked list" << endl;
     display(head);
 
-    cout << "length of list is " << count << endl;
+    // cout << "length of list is " << countLength(head) << endl;
 
-    cout << "after reversing linked list" << endl;
-    reversedListPrint(head);
+    // cout << "after reversing linked list" << endl;
+    // reversedListPrint(head);
 }

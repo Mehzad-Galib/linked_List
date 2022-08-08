@@ -64,6 +64,19 @@ void reversedListPrint(Node *head)
     cout << head->value << " ";
 }
 
+int countLength(Node *&head)
+{
+    int count = 0;
+    Node *temp = head;
+    while (temp != NULL)
+    {
+        count++;
+        temp = temp->Next;
+    }
+
+    return count;
+}
+
 int main()
 {
     Node *head = NULL;
@@ -107,7 +120,7 @@ int main()
     cout << "actual linked list" << endl;
     display(head);
 
-    cout << "length of list is " << count << endl;
+    cout << "length of list is " << countLength(head) << endl;
 
     cout << "after reversing linked list" << endl;
     reversedListPrint(head);

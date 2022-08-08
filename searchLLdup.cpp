@@ -1,0 +1,244 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+public:
+    int value;
+    Node *Next;
+    // created constructor
+    Node(int val)
+    {
+        value = val;
+        Next = NULL;
+    }
+};
+
+void insertAtTail(Node *&head, int val)
+{
+    Node *newNode = new Node(val);
+    if (head == NULL)
+    {
+        head = newNode;
+        return;
+    }
+
+    Node *temp = head;
+
+    while (temp->Next != NULL)
+    {
+        temp = temp->Next;
+    }
+    temp->Next = newNode;
+}
+
+void insertAtHead(Node *&head, int val)
+{
+    // step one newNode create
+    Node *newNode = new Node(val);
+    // step2 update of newNode-> Next
+    newNode->Next = head;
+    // step3 update of head
+    head = newNode;
+}
+
+void display(Node *n)
+{
+    while (n != NULL)
+    {
+        cout << n->value;
+        if (n->Next != NULL)
+            cout << " -> ";
+        n = n->Next;
+    }
+    cout << endl;
+}
+
+void reversedListPrint(Node *head)
+{
+    if (head == NULL)
+        return;
+
+    reversedListPrint(head->Next);
+
+    cout << head->value << " ";
+}
+
+int countLength(Node *&head)
+{
+    int count = 0;
+    Node *temp = head;
+    while (temp != NULL)
+    {
+        count++;
+        temp = temp->Next;
+    }
+
+    return count;
+}
+
+void insertAtSpecific(Node *&head, int pos, int val)
+{
+    int i = 0;
+    Node *temp = head;
+    while (i < pos - 2)
+    {
+        temp = temp->Next;
+        i++;
+    }
+    Node *newNode = new Node(val);
+
+    newNode->Next = temp->Next;
+    temp->Next = newNode;
+}
+
+int searchByValUnq(Node *&head, int key)
+{
+    Node *temp = head;
+    int count = 0;
+    if (temp == NULL)
+    {
+        return -1;
+    }
+    while (temp->value != key)
+    {
+        if (temp->Next == NULL)
+        {
+            return -1;
+        }
+        temp = temp->Next;
+        count++;
+    }
+
+    return count;
+}
+
+void searchValDup(Node *&head, int key)
+{
+    Node *temp = head;
+    int size;
+    size = countLength(head);
+    int position[size + 1], k = 1;
+    int count = 1;
+    int flag = 0;
+
+    while (temp != NULL)
+    {
+        if (temp->value == key)
+        {
+            // cout << count << " ";
+            position[k] = count;
+            k++;
+            flag = 1;
+        }
+        temp = temp->Next;
+        count++;
+    }
+    if (flag == 0)
+        cout << "the search value is not yet in the list" << endl;
+    else
+    {
+        position[0] = k;
+        cout << "the valie is found at position: ";
+        for (int i = 1; i < position[0]; i++)
+        {
+            cout << position[i];
+            if (i < position[0] - 1)
+                cout << ",";
+        }
+        cout << endl;
+    }
+}
+
+int main()
+{
+    Node *head = NULL;
+    int value, position;
+
+    cout << "choice 1: Insertion at head" << endl
+         << "choice 2: Insertion at tail" << endl
+         << "choice 3: Insertion at specific"
+         << endl
+         << "choice 4: search a value for unique list"
+         << endl
+         << "choice 5: search a value for duplicate list"
+         << endl
+         << "choice 0: Exit" << endl;
+
+    cout << "first value will automatically inserted at head" << endl;
+
+    cout << "Next Choice" << endl;
+
+    int choice;
+    cin >> choice;
+    int count = 0;
+
+    while (choice != 0)
+    {
+
+        switch (choice)
+        {
+        case 1:
+            cout << "Enter the value: ";
+            cin >> value;
+            insertAtHead(head, value);
+            count++;
+            break;
+        case 2:
+            cout << "Enter the value: ";
+            cin >> value;
+            insertAtTail(head, value);
+            count++;
+            break;
+        case 3:
+            cout << "enter desired position: ";
+            cin >> position;
+            cout << "Enter the value: ";
+            cin >> value;
+            insertAtSpecific(head, position, value);
+            break;
+        case 4:
+            cout << "Enter the value to search: ";
+            cin >> value;
+            position = searchByValUnq(head, value);
+            if (position != -1)
+            {
+                cout << "the number is at position " << position << endl;
+            }
+            else
+            {
+                cout << "the number not found" << endl;
+            }
+            break;
+        case 5:
+            cout << "Enter the value to search: ";
+            cin >> value;
+
+            cout << "the number is at position ";
+            searchValDup(head, value);
+            // position = searchByValUnq(head, value);
+            // if (position != -1)
+            // {
+            //     cout << "the number is at position " << position << endl;
+            // }
+            // else
+            // {
+            //     cout << "the number not found" << endl;
+            // }
+            // break;
+        default:
+            break;
+        }
+
+        cout << "Next choice? (1:insertion at head, 2: insertion at tail, 3: insertion at specific)" << endl;
+        cin >> choice;
+    }
+
+    cout << "actual linked list" << endl;
+    display(head);
+
+    // cout << "length of list is " << countLength(head) << endl;
+
+    // cout << "after reversing linked list" << endl;
+    // reversedListPrint(head);
+}
