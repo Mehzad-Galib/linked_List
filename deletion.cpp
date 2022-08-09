@@ -22,12 +22,14 @@ struct Test
 void insertAtTail(Node *&head, int val)
 {
     Node *newNode = new Node(val);
+    // if the list is empty
     if (head == NULL)
     {
         head = newNode;
         return;
     }
 
+    // if the list is not empty
     Node *temp = head;
 
     while (temp->Next != NULL)
@@ -49,7 +51,6 @@ void insertAtHead(Node *&head, int val)
 
 void display(Node *n)
 {
-    cout << "Current Linked List" << endl;
     while (n != NULL)
     {
         cout << n->value;
@@ -195,11 +196,13 @@ void deletionAtHead(Node *&head)
     if (temp != NULL)
     {
         head = temp->Next;
+        int deleted = temp->value;
         delete temp;
+        cout << deleted << " deleted perfectly" << endl;
     }
     else
     {
-        cout << "No value in linked list";
+        cout << "No value in linked list" << endl;
     }
 }
 
@@ -282,19 +285,46 @@ void deletionBySpecVal(Node *&head, int val)
     {
         cout << "value is not found so can't delete" << endl;
     }
+}
 
-    // delete the node at that position
+Node *reverseNonRec(Node *&head)
+{
+    Node *prev = NULL;
+    Node *current = head;
+    if (head == NULL)
+    {
+        cout << "the list is empty" << endl;
+        return head;
+    }
+    Node *next = head->Next;
+    int i = 1;
+    while (true)
+    {
+        cout << "situation " << i << endl;
+        current->Next = prev; // ok
+        prev = current;       // ok
+        current = next;       //
+        if (current == NULL)
+        {
+            break;
+        }
+        next = next->Next;
+        display(prev);
+        i++;
+    }
+    return prev;
+}
 
-    // Node *temp = head;
-    // if (temp == NULL)
-    //     cout << "value not found" << endl;
-    // while (temp->value != val)
-    // {
-    //     temp = temp->Next;
-    // }
-    // Node *delNode = temp->Next;
-    // temp->Next = delNode->Next;
-    // delete delNode;
+Node *reverseRec(Node *&head)
+{
+    // base call
+    if (head == NULL || head->Next == NULL)
+        return head;
+    // recursive call
+    Node *newHead = reverseRec(head->Next);
+    head->Next->Next = head;
+    head->Next = NULL;
+    return newHead;
 }
 
 int main()
@@ -320,32 +350,29 @@ int main()
          << endl
          << "choice 10: Deletion by a specific value"
          << endl
+         << "choice 11: Reversal of a List Non Recursive"
+         << endl
+         << "choice 12: Reversal of a List Non Recursive"
+         << endl
          << "choice 0: Exit" << endl;
 
-    cout << "first value will automatically inserted at head" << endl;
-
     cout << "Next Choice" << endl;
-
     int choice;
     cin >> choice;
-    int count = 0;
 
     while (choice != 0)
     {
-
         switch (choice)
         {
         case 1:
             cout << "Enter the value: ";
             cin >> value;
             insertAtHead(head, value);
-            count++;
             break;
         case 2:
             cout << "Enter the value: ";
             cin >> value;
             insertAtTail(head, value);
-            count++;
             break;
         case 3:
             cout << "enter desired position: ";
@@ -400,8 +427,12 @@ int main()
 
         case 7:
             deletionAtHead(head);
+            display(head);
+            break;
         case 8:
             deletionAtTail(head);
+            display(head);
+            break;
         case 9:
             cout << "Enter the position to delete ";
             cin >> value;
@@ -416,6 +447,18 @@ int main()
             cout << "Enter the position to delete ";
             cin >> value;
             deletionBySpecVal(head, value);
+            break;
+
+        case 11:
+            head = reverseNonRec(head);
+            cout << "Linked list reversed in Non-recursive way, new link is" << endl;
+            display(head);
+            break;
+
+        case 12:
+            head = reverseRec(head);
+            cout << "Linked list reversed in recursive way, new link is" << endl;
+            display(head);
             break;
         default:
             break;
