@@ -327,6 +327,85 @@ Node *reverseRec(Node *&head)
     return newHead;
 }
 
+int findMid(Node *&head)
+{
+    // case 1: if head is empty
+    if (head == NULL)
+    {
+        return -1;
+    }
+    Node *slow = head;
+    Node *fast = head;
+
+    while (fast != NULL && fast->Next != NULL)
+    {
+        slow = slow->Next;
+        fast = fast->Next->Next;
+    }
+
+    return slow->value;
+}
+
+void makeCycle(Node *&head, int pos)
+{
+    Node *temp = head;
+    Node *startNode;
+    int count = 1;
+
+    while (temp->Next != NULL)
+    {
+        if (count == pos)
+            startNode = temp;
+        temp = temp->Next;
+        count++;
+    }
+
+    temp->Next = startNode;
+}
+
+bool detectCycle(Node *&head)
+{
+    Node *slow = head;
+    Node *fast = head;
+
+    while (fast != NULL && fast->Next != NULL)
+    {
+        slow = slow->Next;
+        fast = fast->Next->Next;
+
+        // check
+        if (slow->Next == fast->Next)
+            return true;
+    }
+    return false;
+}
+
+void removeCycle(Node *&head)
+{
+    if (head == NULL)
+    {
+        cout << "No value in linked list" << endl;
+    }
+    Node *slow = head;
+    Node *fast = head;
+    do
+    {
+        slow = slow->Next;
+        fast = fast->Next->Next;
+    } while (slow != fast);
+
+    // step 2: re initialization of fast
+    fast = head;
+
+    while (fast->Next != slow->Next)
+    {
+        slow = slow->Next;
+        fast = fast->Next;
+    }
+
+    slow->Next = NULL;
+}
+
 int main()
 {
     Node *head = NULL;
@@ -353,6 +432,14 @@ int main()
          << "choice 11: Reversal of a List Non Recursive"
          << endl
          << "choice 12: Reversal of a List Non Recursive"
+         << endl
+         << "choice 13: Find Mid of Linked List(slow fast pointer method)"
+         << endl
+         << "choice 14: Make a cycle at kth position"
+         << endl
+         << "choice 15: Detect a cycle in linked list"
+         << endl
+         << "choice 16: Delete a cycle in linked list"
          << endl
          << "choice 0: Exit" << endl;
 
@@ -459,6 +546,45 @@ int main()
             head = reverseRec(head);
             cout << "Linked list reversed in recursive way, new link is" << endl;
             display(head);
+            break;
+        case 13:
+            int mid;
+            mid = findMid(head);
+            if (mid == -1)
+            {
+                cout << "the list is empty" << endl;
+            }
+            else
+            {
+                cout << "Mid value is " << mid << endl;
+            }
+
+            break;
+        case 14:
+            cout << "Enter the position to create cycle " << endl;
+            int pos;
+            cin >> pos;
+            makeCycle(head, pos);
+            break;
+
+        case 15:
+            bool cycleStatus;
+            cycleStatus = detectCycle(head);
+            if (cycleStatus)
+                cout << "Cycle available" << endl;
+            else
+            {
+                cout << "No cycle " << endl;
+            }
+        case 16:
+            bool cycleStatus;
+            cycleStatus = detectCycle(head);
+            if (cycleStatus)
+                removeCycle(head);
+            else
+            {
+                cout << "No cycle " << endl;
+            }
             break;
         default:
             break;
